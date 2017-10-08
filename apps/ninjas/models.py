@@ -3,7 +3,6 @@ from __future__ import unicode_literals
 
 from django.db import models
 from django.contrib.auth.models import User, UserManager
-from django.contrib import messages
 
 class NinjaManager(UserManager):
     def validate_registration(self, data):
@@ -25,9 +24,7 @@ class NinjaManager(UserManager):
             new_ninja.save()
             return new_ninja
         else:
-            # for tag in errors:
-                # messages.error(request, errors[tag])
-            return None
+            return errors
             
 
 
