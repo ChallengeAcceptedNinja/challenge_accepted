@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'apps.ninjas',
     'apps.session_bouts',
     'apps.challenge_sessions',
+    'apps.challenges',
 ]
 
 MIDDLEWARE = [
