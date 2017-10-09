@@ -7,6 +7,8 @@ from ..challenges.models import Challenge
 class ChallengeSession(models.Model):
     number = models.IntegerField(default=None, null=True)
     challenge = models.ForeignKey(Challenge, related_name='sessions', default=None, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     @property
     def winners(self):
