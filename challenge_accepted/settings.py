@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'apps.ninjas',
     'apps.session_bouts',
+    'apps.challenge_sessions',
 ]
 
 MIDDLEWARE = [
