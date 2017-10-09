@@ -32,6 +32,4 @@ class Challenge(models.Model):
                 participants = bout.participants.all()
                 for participant in participants:
                     results.append(participant)
-        return results  
-    
-
+        return results
