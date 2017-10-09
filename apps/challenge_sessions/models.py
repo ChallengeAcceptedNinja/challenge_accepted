@@ -2,10 +2,11 @@
 from __future__ import unicode_literals
 
 from django.db import models
-from ..ninjas.models import Ninja
+from ..challenges.models import Challenge
 
 class ChallengeSession(models.Model):
     number = models.IntegerField(default=None, null=True)
+    challenge = models.ForeignKey(Challenge, related_name='sessions', default=None, null=True)
 
     @property
     def winners(self):
