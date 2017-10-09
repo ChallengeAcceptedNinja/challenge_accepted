@@ -10,6 +10,8 @@ class SessionBout(models.Model):
     challenge_session = models.ForeignKey(ChallengeSession, related_name='bouts', default=None, null=True)
     winner = models.ForeignKey(Ninja, related_name='session_bout_wins', default=None, null=True)
     loser = models.ForeignKey(Ninja, related_name='session_bout_losses', default=None, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     @property
     def is_full(self):
