@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'apps.session_bouts',
     'apps.challenge_sessions',
     'apps.challenges',
+    'apps.dojos'
 ]
 
 MIDDLEWARE = [
