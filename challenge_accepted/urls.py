@@ -17,9 +17,11 @@ from django.conf.urls import url, include
 from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
+from apps.ninjas.views import index as homepage
 
 urlpatterns = [
-    url(r'^', include('apps.ninjas.urls', namespace='ninjas')),
+    url(r'^$', homepage),
+    url(r'^ninjas/', include('apps.ninjas.urls', namespace='ninjas'))
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

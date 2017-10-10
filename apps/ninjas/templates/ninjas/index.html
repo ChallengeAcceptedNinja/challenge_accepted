@@ -10,11 +10,32 @@
 </head>
 <body>
   <div class="container">
-    <div class="row">
-      <div class="twelve columns">
-        Coming soon...
-      </div>
-    </div>
+	<div class="row">
+	  <div class="ten columns">
+		<h1>Challenge Accepted!</h1>
+	  </div>
+	  <div class="two columns">
+		<a href="{% url 'ninjas:register' %}" id="button-registration">Register</a>
+		<a href="{% url 'ninjas:login' %}" id="button-login">Login</a>
+	  </div>
+	</div>
+	<div class="row options">
+	  <div class="four columns">
+		<button class="button-primary">
+		  Initiate
+		</button>
+	  </div>
+	  <div class="four columns">
+		<button class="button-primary">
+		  Commence
+		</button>
+	  </div>
+	  <div class="four columns">
+		<button class="button-primary">
+		  Watch
+		</button>
+	  </div>
+	</div>
   </div>
 </body>
 </html>
