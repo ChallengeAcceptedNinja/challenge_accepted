@@ -18,7 +18,7 @@ class HomePageTest(StaticLiveServerTestCase):
         cls.selenium.quit()
         super(HomePageTest, cls).tearDownClass()
 
-    def test_displays_coming_soon_page(self):
+    def test_displays_home_page(self):
         self.selenium.get(self.live_server_url)
         html = self.selenium.page_source
-        self.assertIn('Coming soon', html)
+        self.assertIn('Challenge Accepted!', html)
