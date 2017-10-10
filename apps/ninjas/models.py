@@ -13,20 +13,17 @@ class NinjaManager(UserManager):
             errors['email'] = 'Email already exists.'
         if len(usernames) > 0:
             errors['username'] = 'Username already exists.'
+        if data['password1'] != data['password2']:
+            errors['password'] = 'Passwords must match.'
         if not errors:
             new_ninja = self.create_user(
                 data['username'],
                 data['email'],
-                data['password'],
+                data['password1'],
             )
-            new_ninja.first_name = data['first_name']
-            new_ninja.last_name = data['last_name']
-            new_ninja.save()
             return new_ninja
         else:
             return errors
-            
-
 
 class Ninja(User):
     created_at = models.DateTimeField(auto_now_add=True)

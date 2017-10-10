@@ -13,41 +13,35 @@ class UsersTest(TestCase):
         self.assertIn(ninjas, all_ninjas)
 
     def test_that_username_is_unique(self):
-
         bobby = Ninja.objects.validate_registration({
             'username': 'bobby',
             'email': 'bobby@ross.com',
-            'password': 'password',
-            'first_name': 'bob',
-            'last_name': 'ross'
+            'password1': 'password',
+            'password2': 'password',
         })
 
         jorge = Ninja.objects.validate_registration({
             'username': 'bobby',
             'email': 'rossy@ross.com',
-            'password': 'password',
-            'first_name': 'bob',
-            'last_name': 'ross'
+            'password1': 'password',
+            'password2': 'password',
         })
 
         self.assertEqual(Ninja.objects.count(), 1)
 
     def test_that_email_is_unique(self):
-    
         bobby = Ninja.objects.validate_registration({
             'username': 'bobby',
             'email': 'bobby@ross.com',
-            'password': 'password',
-            'first_name': 'bob',
-            'last_name': 'ross'
+            'password1': 'password',
+            'password2': 'password',
         })
 
         jorge = Ninja.objects.validate_registration({
             'username': 'jorgy',
             'email': 'bobby@ross.com',
-            'password': 'password',
-            'first_name': 'bob',
-            'last_name': 'ross'
+            'password1': 'password',
+            'password2': 'password',
         })
 
         self.assertEqual(Ninja.objects.count(), 1)
