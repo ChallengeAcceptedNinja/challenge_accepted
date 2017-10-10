@@ -2,12 +2,16 @@
 from __future__ import unicode_literals
 
 from django.shortcuts import render
+from .forms import NinjaRegistrationForm
 
 def index(request):
   return render(request, 'ninjas/index.html')
 
 def register(request):
-  return render(request, 'ninjas/register.html')
+  context = {
+    'registration_form': NinjaRegistrationForm()
+  }
+  return render(request, 'ninjas/register.html', context)
 
 def login(request):
   return render(request, 'ninjas/login.html')

@@ -11,8 +11,13 @@
 <body>
   <div class="container">
     <div class="row">
-      <div class="twelve columns">
-        welcome to the registration form
+      <div class="six columns">
+        <h1>Register</h1>
+        <form action="" id="form-registration">
+          {% csrf_token %}
+          {{ registration_form }}
+          <button class="button-primary">Register</button>
+        </form>
       </div>
     </div>
   </div>
