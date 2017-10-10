@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'apps.session_bouts',
     'apps.challenge_sessions',
     'apps.challenges',
-    'apps.dojos'
+    'apps.dojos',
+    'apps.avatars',
 ]
 
 MIDDLEWARE = [
@@ -123,3 +124,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+
+MEDIA_URL = '/media/'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
