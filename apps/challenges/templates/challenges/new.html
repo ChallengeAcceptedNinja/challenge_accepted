@@ -1,7 +1,12 @@
 {% extends 'challenges/base.html' %}
 
 {% block content %}
-    <h1>Create Challenge</h1>
+    <h1>Initiate a New Challenge!</h1>
+    <form action="{% url 'challenges:new' %}" method="POST", id="new_challenge_form">
+        {% csrf_token %}
+        {{ init_challenge_form }}
+        <button type="submit" class="button-primary">Initiate Challenge</button>
+    </form>
 
 
 {% endblock %}

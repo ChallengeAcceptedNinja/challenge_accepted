@@ -5,9 +5,14 @@ from django.shortcuts import render, redirect
 from django.core.urlresolvers import reverse
 from django.views import View
 
-class ChallengeView(View):
+from .forms import ChallengeInitiateForm
+
+class InitiateChallenge(View):
     def get(self, request):
-        return render(request, 'challenges/signup.html')
+        context = {
+            'init_challenge_form': ChallengeInitiateForm()
+        }
+        return render(request, 'challenges/new.html', context)
 
     def post(self, request):
         pass

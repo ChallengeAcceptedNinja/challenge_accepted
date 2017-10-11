@@ -5,6 +5,8 @@ from django.db import models
 class Challenge(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField()
+    start_date = models.DateTimeField(default=None)
+    signup_end_date = models.DateTimeField(default=None)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
