@@ -17,7 +17,7 @@ class NinjaManager(UserManager):
             new_ninja = self.create_user(
                 data['username'],
                 data['email'],
-                data['password1'],
+                data['password'],
             )
             return new_ninja
         else:

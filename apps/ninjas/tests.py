@@ -16,15 +16,15 @@ class UsersTest(TestCase):
         bobby = Ninja.objects.validate_registration({
             'username': 'bobby',
             'email': 'bobby@ross.com',
-            'password1': 'password',
-            'password2': 'password',
+            'password': 'password',
+            'password_confirm': 'password',
         })
 
         jorge = Ninja.objects.validate_registration({
             'username': 'bobby',
             'email': 'rossy@ross.com',
-            'password1': 'password',
-            'password2': 'password',
+            'password': 'password',
+            'password_confirm': 'password',
         })
 
         self.assertEqual(Ninja.objects.count(), 1)
@@ -33,15 +33,15 @@ class UsersTest(TestCase):
         bobby = Ninja.objects.validate_registration({
             'username': 'bobby',
             'email': 'bobby@ross.com',
-            'password1': 'password',
-            'password2': 'password',
+            'password': 'password',
+            'password_confirm': 'password',
         })
 
         jorge = Ninja.objects.validate_registration({
             'username': 'jorgy',
             'email': 'bobby@ross.com',
-            'password1': 'password',
-            'password2': 'password',
+            'password': 'password',
+            'password_confirm': 'password',
         })
 
         self.assertEqual(Ninja.objects.count(), 1)
