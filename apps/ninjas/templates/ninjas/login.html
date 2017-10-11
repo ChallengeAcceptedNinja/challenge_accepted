@@ -11,8 +11,20 @@
 <body>
   <div class="container">
     <div class="row">
-      <div class="twelve columns">
-        welcome to the login form
+      <div class="six columns">
+        <h1>Login</h1>
+        {% if messages %}
+        <ul>
+        {% for message in messages %}
+          <li{% if message.tags %}class="{{message.tags}}"{% endif %}>{{message}}</li>
+        {% endfor %}
+        </ul>
+        {% endif %}
+        <form action="{% url 'ninjas:login' %}" method="POST" id="form-login">
+          {% csrf_token %}
+          {{ login_form }}
+          <button type="submit" class="button-primary">Login</button>
+        </form>
       </div>
     </div>
   </div>
