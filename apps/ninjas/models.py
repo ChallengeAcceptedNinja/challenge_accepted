@@ -13,8 +13,6 @@ class NinjaManager(UserManager):
             errors['email'] = 'Email already exists.'
         if len(usernames) > 0:
             errors['username'] = 'Username already exists.'
-        if data['password1'] != data['password2']:
-            errors['password'] = 'Passwords must match.'
         if not errors:
             new_ninja = self.create_user(
                 data['username'],
