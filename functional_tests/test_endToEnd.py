@@ -39,7 +39,6 @@ class EndToEnd(StaticLiveServerTestCase):
         self.assertEqual(registration_form.tag_name, 'form')
     
     def test_user_is_redirected_to_dashboard_after_successful_registration(self):
-        self.selenium.get(self.live_server_url + '/ninjas/register')
         self.register_user()
         time.sleep(2)
         self.assertEqual(self.selenium.current_url, self.live_server_url + '/ninjas/dashboard')
@@ -51,7 +50,14 @@ class EndToEnd(StaticLiveServerTestCase):
         self.assertEqual(login_form.tag_name, 'form')
     
     def test_user_is_redirected_to_dashboard_after_successful_login(self):
-        self.register_user()
+        bob = Ninja.objects.validate_registration({
+            'username': 'bob',
+            'email': 'bob@email.com',
+            'password': 'aGreatPassword123',
+            'password_confirm': 'aGreatPassword123'
+        })
+        # TODO: Think about: how come this doesn't work if register_user is called,
+        # and then the following code is run?
         self.selenium.get(self.live_server_url + '/ninjas/login')
         form = self.selenium.find_element_by_id('form-login')
         form.find_element_by_name('username').send_keys('bob')
@@ -61,9 +67,10 @@ class EndToEnd(StaticLiveServerTestCase):
         self.assertEqual(self.selenium.current_url, self.live_server_url + '/ninjas/dashboard')
 
     def register_user(self):
+        self.selenium.get(self.live_server_url + '/ninjas/register')
         form = self.selenium.find_element_by_id('form-registration')
         form.find_element_by_name('username').send_keys('bob')
-        form.find_element_by_name('password1').send_keys('aGreatPassword123')
-        form.find_element_by_name('password2').send_keys('aGreatPassword123')
         form.find_element_by_name('email').send_keys('bob@email.com')
+        form.find_element_by_name('password').send_keys('aGreatPassword123')
+        form.find_element_by_name('password_confirm').send_keys('aGreatPassword123')
         form.find_element_by_tag_name('button').click()

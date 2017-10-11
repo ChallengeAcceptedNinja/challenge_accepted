@@ -4,16 +4,18 @@ from __future__ import unicode_literals
 from django.shortcuts import render, redirect
 from django.core.urlresolvers import reverse
 from django.views import View
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 
 from .forms import NinjaRegistrationForm, NinjaLoginForm
 from .models import Ninja
 
-def index(request):
-    return render(request, 'ninjas/index.html')
+class Index(View):
+    def get(self, request):
+        return render(request, 'ninjas/index.html')
 
-class RegisterView(View):
+class Register(View):
     def get(self, request):
         context = {
             'registration_form': NinjaRegistrationForm()
@@ -30,11 +32,11 @@ class RegisterView(View):
                 return redirect(reverse('ninjas:dashboard'))
             else:
                 errors.update(result)
-        errors.update(form.error_messages)
+        errors.update(form.errors)
         add_errors(request, errors)
         return redirect(reverse('ninjas:register'))
 
-class LoginView(View):
+class Login(View):
     def get(self, request):
         context = {
             'login_form': NinjaLoginForm()
@@ -60,8 +62,14 @@ class LoginView(View):
         add_errors(request, errors)
         return redirect(reverse('ninjas:login'))
 
-def dashboard(request):
-    return render(request, 'ninjas/dashboard.html')
+class Dashboard(LoginRequiredMixin, View):
+    def get(self, request):
+        return render(request, 'ninjas/dashboard.html')
+
+class Logout(View):
+    def get(self, request):
+        logout(request)
+        return redirect(reverse('home'))
 
 def add_errors(request, errors):
     for tag in errors:
