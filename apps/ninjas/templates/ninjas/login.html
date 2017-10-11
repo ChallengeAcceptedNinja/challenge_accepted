@@ -11,8 +11,12 @@
 <body>
   <div class="container">
     <div class="row">
-      <div class="twelve columns">
-        welcome to the login form
+      <div class="six columns">
+        <form action="{% url 'ninjas:login' %}" method="POST" id="form-login">
+          {% csrf_token %}
+          {{ login_form }}
+          <button type="submit" class="button-primary">Login</button>
+        </form>
       </div>
     </div>
   </div>

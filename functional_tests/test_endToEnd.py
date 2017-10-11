@@ -5,6 +5,8 @@ import unittest, time
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium.webdriver.support.wait import WebDriverWait
 
+from apps.ninjas.models import Ninja
+
 class EndToEnd(StaticLiveServerTestCase):
     @classmethod
     def setUpClass(cls):
@@ -38,11 +40,30 @@ class EndToEnd(StaticLiveServerTestCase):
     
     def test_user_is_redirected_to_dashboard_after_successful_registration(self):
         self.selenium.get(self.live_server_url + '/ninjas/register')
+        self.register_user()
+        time.sleep(2)
+        self.assertEqual(self.selenium.current_url, self.live_server_url + '/ninjas/dashboard')
+    
+    # LOGIN PAGE TESTS
+    def test_user_is_presented_with_login_form(self):
+        self.selenium.get(self.live_server_url + '/ninjas/login')
+        login_form = self.selenium.find_element_by_id('form-login')
+        self.assertEqual(login_form.tag_name, 'form')
+    
+    def test_user_is_redirected_to_dashboard_after_successful_login(self):
+        self.register_user()
+        self.selenium.get(self.live_server_url + '/ninjas/login')
+        form = self.selenium.find_element_by_id('form-login')
+        form.find_element_by_name('username').send_keys('bob')
+        form.find_element_by_name('password').send_keys('aGreatPassword123')
+        form.find_element_by_tag_name('button').click()
+        time.sleep(2)
+        self.assertEqual(self.selenium.current_url, self.live_server_url + '/ninjas/dashboard')
+
+    def register_user(self):
         form = self.selenium.find_element_by_id('form-registration')
         form.find_element_by_name('username').send_keys('bob')
         form.find_element_by_name('password1').send_keys('aGreatPassword123')
         form.find_element_by_name('password2').send_keys('aGreatPassword123')
         form.find_element_by_name('email').send_keys('bob@email.com')
         form.find_element_by_tag_name('button').click()
-        time.sleep(2)
-        self.assertEqual(self.selenium.current_url, self.live_server_url + '/ninjas/dashboard')
