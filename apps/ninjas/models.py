@@ -3,9 +3,6 @@ from __future__ import unicode_literals
 
 from django.db import models
 from django.contrib.auth.models import User, UserManager
-# from ..challenges.models import Challenge
-# from ..challenge_sessions.models import ChallengeSession
-# from ..session_bouts.models import SessionBout
 
 class NinjaManager(UserManager):
     def validate_registration(self, data):
@@ -18,9 +15,9 @@ class NinjaManager(UserManager):
             errors['username'] = 'Username already exists.'
         if not errors:
             new_ninja = self.create_user(
-                data['username'],
-                data['email'],
-                data['password'],
+                username=data['username'],
+                email=data['email'],
+                password=data['password'],
             )
             return new_ninja
         else:
@@ -38,8 +35,3 @@ class Ninja(User):
     @property
     def challenges_lost(self):
         return 0
-
-    # @property
-    # def participated_challenges(self):
-    #     participated_session_bouts = SessionBout.objects.filter(participants__in=[self])
-    #     return participated_session_bouts

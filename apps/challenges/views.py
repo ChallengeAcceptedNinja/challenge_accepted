@@ -15,7 +15,7 @@ from ..ninjas.models import Ninja
 from ..challenge_sessions.models import ChallengeSession
 from ..session_bouts.models import SessionBout
 
-class ChallengeIndex(View):
+class JoinChallenge(View):
     def get(self, request, challenge_id):
         context = {
             'challenge_id': challenge_id,
@@ -25,10 +25,18 @@ class ChallengeIndex(View):
             context['data'] = simplejson.dumps(generate_challenge_data(challenge_id))
             return render(request, 'challenges/challenge.html', context)
         except:
-            return redirect(reverse('ninjas:dashboard'))
+            pass
+        return redirect(reverse('ninjas:dashboard'))
     
-    def post(self, request):
-        pass
+    def post(self, request, challenge_id):
+        # Join challenge
+        try:
+            challenge = Challenge.objects.get(id=challenge_id)
+            ninja = Ninja.objects.get(id=self.request.user.id)
+            add_ninja_to_challenge(ninja, challenge)
+        except:
+            return redirect(reverse('challenges:join'), kwargs={ 'challenge_id': challenge_id })
+        return redirect(reverse('ninjas:dashboard'))
 
 class InitiateChallenge(View):
     def get(self, request):
@@ -60,15 +68,6 @@ class InitiateChallenge(View):
         add_errors(request, errors)
         return redirect(reverse('challenges:new'))
 
-
-class JoinChallenge(View):
-    def get(self, request):
-        return render(request, 'challenges/join_challenge.html')
-
-    def post(self, request):
-        return redirect(reverse('ninjas:dashboard'))
-
-
 def generate_challenge_data(challenge_id):
     # Get the challenge
     try:
@@ -82,6 +81,7 @@ def generate_challenge_data(challenge_id):
         data = {}
     
     # Format session bouts data
+    # TODO: FIX ME
     try:
         for session in sessions.all():
             session_results = []
@@ -98,11 +98,28 @@ def generate_challenge_data(challenge_id):
                         bout_scores.append(None)
                 session_results.append(bout_scores)
                 if session.number == 1:
+                    if not bout.is_full:
+                        participants.append(None)
                     data['teams'].append(participants)
             data['results'].append(session_results)
     except:
         pass
     return data
+
+def add_ninja_to_challenge(ninja, challenge):
+    # Ninja can only join the first session
+    try:
+        first_session = ChallengeSession.objects.get(challenge=challenge, number=1)
+        first_bout = SessionBout.objects.filter(challenge_session=first_session).last()
+        if not first_bout.is_full:
+            first_bout.participants.add(ninja)
+            first_bout.save()
+        else:
+            new_session_bout = SessionBout.objects.create(challenge_session=first_session)
+            new_session_bout.participants.add(ninja)
+            new_session_bout.save()
+    except:
+        pass
 
 def add_errors(request, errors):
     for tag in errors:

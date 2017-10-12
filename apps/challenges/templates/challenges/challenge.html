@@ -1,14 +1,17 @@
 {% extends 'challenges/base.html' %}
-{% load static %}
-<link rel="stylesheet" href="{% static 'challenges/jquery.bracket.min.css' %}">
 {% block content %}
     <h1>Challenge page</h1>
     Page for challenge #{{ challenge_id }}
     <div id="bracket"></div>
+    <form action="{% url 'challenges:join' challenge_id=challenge_id %}" method="POST">
+        {% csrf_token %}
+        <button class="button-primary">JOIN</button>
+    </form>
+
     
     {% load static %}
-    <script type="text/javascript" src="{% static 'challenges/jquery-3.2.1.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'challenges/jquery.bracket.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'challenges/js/jquery-3.2.1.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'challenges/js/jquery.bracket.min.js' %}"></script>
     <script type="text/javascript">
         my_data = {{ data|safe }}
 
