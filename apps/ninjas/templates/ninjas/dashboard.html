@@ -4,9 +4,9 @@
   <meta charset="UTF-8">
   <title>Challenge Accepted!</title>
   {% load static %}
-  <link rel="stylesheet" href="{% static "ninjas/normalize.css" %}"/>
-  <link rel="stylesheet" href="{% static "ninjas/skeleton.css" %}"/>
-  <link rel="stylesheet" href="{% static "ninjas/styles.css" %}"/>
+  <link rel="stylesheet" href="{% static "ninjas/css/normalize.css" %}"/>
+  <link rel="stylesheet" href="{% static "ninjas/css/skeleton.css" %}"/>
+  <link rel="stylesheet" href="{% static "ninjas/css/styles.css" %}"/>
 </head>
 <body>
   <div class="container">
@@ -24,6 +24,7 @@
           <h2>Menu</h2>
           <ul>
             <a href="#">My Profile</a>
+            <a href="{% url 'ninjas:dashboard' %}">Challenge Dashboard</a>
             <a href="{% url 'challenges:new' %}">Create Challenge</a>
             <a href="#">Dojos</a>
             <a href="#">Settings</a>
@@ -33,19 +34,41 @@
       <div class="nine columns">
         <h2>My Challenges</h2>
         <div>
-          <p>No challenges yet.</p>
+          <table>
+            <tr>
+              <th>Challenge Name</th>
+              <th>Description</th>
+              <th>Commencement Date</th>
+            </tr>
+            {% for challenge in challenges %}
+              {% if current_user in challenge.participants %}
+                <tr>
+                  <td><a href="">{{ challenge.name }}</a></td>
+                  <td>{{ challenge.description }}</td>
+                  <td>{{ challenge.start_date }}</td>
+                </tr>
+              {% endif %}
+            {% endfor %}
+          </table>
         </div>
       </div>
-      <div class="five columns">
-        <h2>Open Challenges</h2>
+      <div class="nine columns">
+        <h2>All Challenges</h2>
         <div>
-          <p>No open challenges.</p>
-        </div>
-      </div>
-      <div class="four columns">
-        <h2>In-progress Challenges</h2>
-        <div>
-          <p>No open challenges.</p>
+          <table>
+            <tr>
+              <th>Challenge Name</th>
+              <th>Commencement Date</th>
+              <th>Last Day to Join</th>
+            </tr>
+            {% for challenge in challenges %}
+            <tr>
+              <td><a href="">{{ challenge.name }}</a></td>
+              <td>{{ challenge.start_date }}</td>
+              <td>{{ challenge.signup_end_date }}</td>
+            </tr>
+            {% endfor %}
+          </table>
         </div>
       </div>
     </div>

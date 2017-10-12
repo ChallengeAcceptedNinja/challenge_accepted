@@ -4,23 +4,25 @@
         <meta charset="UTF-8">
         <title>Challenge Accepted!</title>
         {% load static %}
-        <link rel="stylesheet" href="{% static "ninjas/normalize.css" %}"/>
-        <link rel="stylesheet" href="{% static "ninjas/skeleton.css" %}"/>
-        <link rel="stylesheet" href="{% static "ninjas/styles.css" %}"/>
+        <link rel="stylesheet" href="{% static "ninjas/css/normalize.css" %}"/>
+        <link rel="stylesheet" href="{% static "ninjas/css/skeleton.css" %}"/>
+        <link rel="stylesheet" href="{% static "ninjas/css/styles.css" %}" media="screen" title="no title" charset="utf-8">
+        {% block date_picker %}
+        {% endblock %}      
     </head>
     <body>
         <div class="container">
             <div class="row">
                 <div id="mySidenav" class="three columns">
-                    <a href="#">My Profile</a>
-                    <a href="{% url 'challenges:new' %}">Create Challenge</a>
-                    <a href="#">Dojos</a>
-                    <a href="#">Settings</a>
-                    <a href="#">Logout</a>
+                    <a href="{% url 'ninjas:dashboard' %}" class="row">Challenge Dashboard</a>
+                    <a href="{% url 'challenges:new' %}" class="row">Create Challenge</a>
+                    <a href="{% url 'ninjas:logout' %}" class="row">Logout</a>
+                </div>
+                <div class="nine columns">
+                    {% block content %}
+                    {% endblock %}
                 </div>
             </div>
         </div>
-        {% block content %}
-        {% endblock %}
     </body>
 </html>
