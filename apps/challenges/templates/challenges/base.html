@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Challenge Accepted!</title>
+        {% load static %}
+        <link rel="stylesheet" href="{% static "ninjas/css/normalize.css" %}"/>
+        <link rel="stylesheet" href="{% static "ninjas/css/skeleton.css" %}"/>
+        <link rel="stylesheet" href="{% static "ninjas/css/styles.css" %}" media="screen" title="no title" charset="utf-8">
+        {% block date_picker %}
+        {% endblock %}      
+    </head>
+    <body>
+        <div class="container">
+            <div class="row">
+                <div id="mySidenav" class="three columns">
+                    <a href="{% url 'ninjas:dashboard' %}" class="row">Challenge Dashboard</a>
+                    <a href="{% url 'challenges:new' %}" class="row">Create Challenge</a>
+                    <a href="{% url 'ninjas:logout' %}" class="row">Logout</a>
+                </div>
+                <div class="nine columns">
+                    {% block content %}
+                    {% endblock %}
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

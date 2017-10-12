@@ -1,0 +1,31 @@
+{% extends 'challenges/base.html' %}
+
+{% block date_picker %}
+        <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css"> 
+        <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+        <script src="http://code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
+        <script>
+        $(document).ready(function() {
+            $('.datepicker').datepicker();
+        });
+        </script>
+{% endblock %}
+
+{% block content %}
+    <h1>Initiate a New Challenge!</h1>
+    {% if messages %}
+    <ul>
+    {% for message in messages %}
+      <li{% if message.tags %}class="{{message.tags}}"{% endif %}>{{message}}</li>
+    {% endfor %}
+    </ul>
+    {% endif %}
+    <form action="{% url 'challenges:new' %}" method="POST", id="new_challenge_form">
+        {% csrf_token %}
+        {{ init_challenge_form }}
+        <input type="hidden" name="hidden_id" value="{{ user.id }}">
+        <button type="submit" class="button-primary">Initiate Challenge</button>
+    </form>
+
+
+{% endblock %}

@@ -3,6 +3,9 @@ from __future__ import unicode_literals
 
 from django.db import models
 from django.contrib.auth.models import User, UserManager
+# from ..challenges.models import Challenge
+# from ..challenge_sessions.models import ChallengeSession
+# from ..session_bouts.models import SessionBout
 
 class NinjaManager(UserManager):
     def validate_registration(self, data):
@@ -35,3 +38,8 @@ class Ninja(User):
     @property
     def challenges_lost(self):
         return 0
+
+    # @property
+    # def participated_challenges(self):
+    #     participated_session_bouts = SessionBout.objects.filter(participants__in=[self])
+    #     return participated_session_bouts

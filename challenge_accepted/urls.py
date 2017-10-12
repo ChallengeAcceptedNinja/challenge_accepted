@@ -21,7 +21,8 @@ from apps.ninjas.views import Index as homepage
 
 urlpatterns = [
     url(r'^$', homepage.as_view(), name='home'),
-    url(r'^ninjas/', include('apps.ninjas.urls', namespace='ninjas'))
+    url(r'^ninjas/', include('apps.ninjas.urls', namespace='ninjas')),
+    url(r'^challenges/', include('apps.challenges.urls', namespace='challenges')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -10,6 +10,7 @@ from django.contrib import messages
 
 from .forms import NinjaRegistrationForm, NinjaLoginForm
 from .models import Ninja
+from ..challenges.models import Challenge
 
 class Index(View):
     def get(self, request):
@@ -64,7 +65,12 @@ class Login(View):
 
 class Dashboard(LoginRequiredMixin, View):
     def get(self, request):
-        return render(request, 'ninjas/dashboard.html')
+        context = {
+            'challenges': Challenge.objects.all(),
+            'current_user': Ninja.objects.get(id=self.request.user.id),
+        }
+        return render(request, 'ninjas/dashboard.html', context)
+        # loop through Challenge.participants to find 
 
 class Logout(View):
     def get(self, request):
