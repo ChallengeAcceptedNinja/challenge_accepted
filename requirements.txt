@@ -21,3 +21,4 @@ Twisted==17.9.0
 txaio==2.8.2
 virtualenv==15.1.0
 zope.interface==4.4.3
+django-extensions==1.9.1

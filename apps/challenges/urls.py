@@ -4,4 +4,5 @@ from . import views
 urlpatterns = [
     url(r'^new$', views.InitiateChallenge.as_view(), name='new'),
     url(r'^join$', views.JoinChallenge.as_view(), name='join'),
+    url(r'^(?P<challenge_id>\d+)$', views.ChallengeIndex.as_view())
 ]
