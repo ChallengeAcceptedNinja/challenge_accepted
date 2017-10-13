@@ -7,36 +7,13 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import View
 from copy import copy
-import simplejson
+import simplejson, datetime
 
 from .forms import ChallengeInitiateForm
 from .models import Challenge
 from ..ninjas.models import Ninja
 from ..challenge_sessions.models import ChallengeSession
 from ..session_bouts.models import SessionBout
-
-class JoinChallenge(View):
-    def get(self, request, challenge_id):
-        context = {
-            'challenge_id': challenge_id,
-        }
-        try:
-            challenge = Challenge.objects.get(id=challenge_id)
-            context['data'] = simplejson.dumps(generate_challenge_data(challenge_id))
-            return render(request, 'challenges/challenge.html', context)
-        except:
-            pass
-        return redirect(reverse('ninjas:dashboard'))
-    
-    def post(self, request, challenge_id):
-        # Join challenge
-        try:
-            challenge = Challenge.objects.get(id=challenge_id)
-            ninja = Ninja.objects.get(id=self.request.user.id)
-            add_ninja_to_challenge(ninja, challenge)
-        except:
-            return redirect(reverse('challenges:join'), kwargs={ 'challenge_id': challenge_id })
-        return redirect(reverse('ninjas:dashboard'))
 
 class InitiateChallenge(View):
     def get(self, request):
@@ -67,6 +44,56 @@ class InitiateChallenge(View):
         errors.update(form.errors)
         add_errors(request, errors)
         return redirect(reverse('challenges:new'))
+
+class JoinChallenge(View):
+    def get(self, request, challenge_id):
+        context = {
+            'challenge_id': challenge_id,
+        }
+        try:
+            challenge = Challenge.objects.get(id=challenge_id)
+            context['data'] = simplejson.dumps(generate_challenge_data(challenge_id))
+            return render(request, 'challenges/challenge.html', context)
+        except:
+            pass
+        return redirect(reverse('ninjas:dashboard'))
+    
+    def post(self, request, challenge_id):
+        # Join challenge
+        try:
+            challenge = Challenge.objects.get(id=challenge_id)
+            ninja = Ninja.objects.get(id=self.request.user.id)
+            add_ninja_to_challenge(ninja, challenge)
+        except:
+            return redirect(reverse('challenges:join'), kwargs={ 'challenge_id': challenge_id })
+        return redirect(reverse('ninjas:dashboard'))
+
+class Bouts(View):
+    def get(self, request):
+        context = {}
+        bouts_data = []
+        try:
+            ninja = Ninja.objects.get(id=self.request.user.id)
+            all_session_bouts = SessionBout.objects.all()
+            for bout in all_session_bouts:
+                if ninja in bout.participants.all():
+                    temp = get_bout_data(ninja, bout)
+                    if bout_is_active(bout):
+                        bouts_data.append(temp)
+        except:
+            pass
+        context['bouts'] = bouts_data
+        return render(request, 'challenges/bouts.html', context)
+    
+    def post(self, request):
+        pass
+
+class DetermineResult(View):
+    def get(self, request):
+        pass
+    
+    def post(self, request):
+        pass
 
 def generate_challenge_data(challenge_id):
     # Get the challenge
@@ -120,6 +147,22 @@ def add_ninja_to_challenge(ninja, challenge):
             new_session_bout.save()
     except:
         pass
+
+def bout_is_active(bout):
+    now = datetime.datetime.today()
+    session1 = bout.challenge_session
+    challenge1 = session1.challenge
+    return now > challenge1.start_date
+
+def get_bout_data(ninja, bout):
+    data = {}
+    session1 = bout.challenge_session
+    challenge1 = session1.challenge
+    data['challenge_name'] = challenge1.name
+    for participant in bout.participants.all():
+        if ninja != participant:
+            data['opponent'] = participant.username
+    return data
 
 def add_errors(request, errors):
     for tag in errors:

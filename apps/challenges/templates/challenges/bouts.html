@@ -1,0 +1,23 @@
+{% extends 'challenges/base.html' %}
+{% block content %}
+    <h1>Manage bouts page</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Challenge Name</th>
+                <th>Vs.</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for bout in bouts %}
+            <tr>
+                <td>{{ bout.challenge_name }}</td>
+                <td>{{ bout.opponent }}</td>
+                <td><a href="">Won</a> <a href="">Lost</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}
