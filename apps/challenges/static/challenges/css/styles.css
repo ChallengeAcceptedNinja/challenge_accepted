@@ -1,3 +1,97 @@
+html {
+    background-color: rgb(51, 64, 78);
+}
+
+body {
+    color: #D5D8DC;
+    font-family: 'Merienda', sans-serif;
+}
+
+h1{
+    color: #D35400;
+    margin-top: 30px;
+}
+
+h2 {
+    color: #D5D8DC;
+    margin-top: 20px;
+}
+
+label {
+    font-size: 20px;
+}
+
+#mySidenav {
+    margin-top: 20px;
+    background-color: #2C3E50;
+    padding: 30px;
+    height: 800px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    display: inline-block;
+}
+
+a.nav:hover { 
+    text-shadow: 1px 1px 1px white;
+}
+
+a.nav {
+    font-size: 20px;
+    color: #2471A3;
+    text-decoration: none;
+    margin-bottom: 20px;
+}
+
 button {
     display: block;
+    background-color: #2980B9;
+    border-radius: 4px;
+    border: none;
+    color: #FFFFFF;
+    text-align: center;
+    font-size: 18px;
+    padding: 0px;
+    width: 290px;
+    transition: all 0.5s;
+    cursor: pointer;
+    margin-top: 20px
+  }
+
+button span {
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+    transition: 0.5s;
+  }
+  
+button span:after {
+    content: '\00bb';
+    position: absolute;
+    opacity: 0;
+    top: 0;
+    right: -20px;
+    transition: 0.5s;
+}
+
+button:hover span {
+    padding-right: 25px;
+}
+
+button:hover span:after {
+    opacity: 1;
+    right: 0;
+}
+
+.username {
+    color: #D35400;
+}
+
+.logReg {
+    text-decoration: none;
+    font-size: 35px;
+    margin: 20px 20px;
+}
+
+
+input {
+    color: black;
 }

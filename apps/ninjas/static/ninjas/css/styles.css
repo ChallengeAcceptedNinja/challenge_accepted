@@ -1,3 +1,9 @@
 button {
     display: block;
 }
+
+html {
+    background-color: rgb(36, 39, 43);
+    font: yellow;
+}
+
