@@ -14,7 +14,20 @@
             <tr>
                 <td>{{ bout.challenge_name }}</td>
                 <td>{{ bout.opponent }}</td>
-                <td><a href="{% url 'challenges:determine' challenge_id=bout.challenge_id bout_id=bout.bout_id won=True%}">Won</a> <a href="{% url 'challenges:determine' challenge_id=bout.challenge_id bout_id=bout.bout_id won=False%}">Lost</a></td>
+                <td>
+                    <form action="{% url 'challenges:determine' bout_id=bout.bout_id %}" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="result" value="True">
+                        <input type="hidden" name="challenge_id" value={{bout.challenge_id}}>
+                        <button type="submit" class="button-primary">Won</button>
+                    </form>
+                    <form action="{% url 'challenges:determine' bout_id=bout.bout_id %}" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="challenge_id" value={{bout.challenge_id}}>
+                        <input type="hidden" name="result" value="False">
+                        <button type="submit" class="button-primary">Lost</button>
+                    </form>
+                </td>
             </tr>
             {% endfor %}
         </tbody>
