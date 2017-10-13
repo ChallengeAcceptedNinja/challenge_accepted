@@ -53,6 +53,7 @@ class JoinChallenge(View):
         }
         try:
             challenge = Challenge.objects.get(id=challenge_id)
+            context['challenge_name'] = challenge.name
             context['data'] = simplejson.dumps(generate_challenge_data(challenge_id))
             return render(request, 'challenges/challenge.html', context)
         except:

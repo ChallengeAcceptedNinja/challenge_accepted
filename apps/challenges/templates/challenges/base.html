@@ -6,8 +6,9 @@
         {% load static %}
         <link rel="stylesheet" href="{% static "ninjas/css/normalize.css" %}"/>
         <link rel="stylesheet" href="{% static "ninjas/css/skeleton.css" %}"/>
-        <link rel="stylesheet" href="{% static "ninjas/css/styles.css" %}" media="screen" title="no title" charset="utf-8">
+        <link href="https://fonts.googleapis.com/css?family=Merienda" rel="stylesheet">
         <link rel="stylesheet" href="{% static 'challenges/js/jquery.bracket.min.css' %}">
+        <link rel="stylesheet"  href="{% static "challenges/css/styles.css" %}" media="screen" title="no title" charset="utf-8" media="screen" title="no title" charset="utf-8">
         {% block date_picker %}
         {% endblock %}      
     </head>
@@ -15,9 +16,12 @@
         <div class="container">
             <div class="row">
                 <div id="mySidenav" class="three columns">
-                    <a href="{% url 'ninjas:dashboard' %}" class="row">Challenge Dashboard</a>
-                    <a href="{% url 'challenges:new' %}" class="row">Create Challenge</a>
-                    <a href="{% url 'ninjas:logout' %}" class="row">Logout</a>
+                    <h2 class="titles">Menu</h2>
+                    <h6 class="username">ようこそ {{ request.user.username }}さん!</h6>
+                    <a href="{% url 'ninjas:dashboard' %}" class="row nav">Challenge Dashboard</a>
+                    <a href="{% url 'challenges:new' %}" class="row nav">Create Challenge</a>
+                    <a href="{% url 'challenges:bouts' %}" class="row nav">Manage Bouts</a>
+                    <a href="{% url 'ninjas:logout' %}" class="row nav">Logout</a>
                 </div>
                 <div class="nine columns">
                     {% block content %}
