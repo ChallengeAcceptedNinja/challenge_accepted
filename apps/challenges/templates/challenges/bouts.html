@@ -14,7 +14,7 @@
             <tr>
                 <td>{{ bout.challenge_name }}</td>
                 <td>{{ bout.opponent }}</td>
-                <td><a href="">Won</a> <a href="">Lost</a></td>
+                <td><a href="{% url 'challenges:determine' challenge_id=bout.challenge_id bout_id=bout.bout_id won=True%}">Won</a> <a href="{% url 'challenges:determine' challenge_id=bout.challenge_id bout_id=bout.bout_id won=False%}">Lost</a></td>
             </tr>
             {% endfor %}
         </tbody>

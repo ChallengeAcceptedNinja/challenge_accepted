@@ -38,6 +38,7 @@ class InitiateChallenge(View):
                 new_bout.challenge_session=new_session
                 new_bout.participants.add(current_user)
                 new_bout.save()
+                generate_bouts(new_session)
                 return redirect(reverse('ninjas:dashboard'))
             else:
                 errors.update(result)
@@ -62,11 +63,13 @@ class JoinChallenge(View):
         # Join challenge
         try:
             challenge = Challenge.objects.get(id=challenge_id)
+            print "challenge:", challenge
             ninja = Ninja.objects.get(id=self.request.user.id)
+            print "ninja:", ninja
             add_ninja_to_challenge(ninja, challenge)
         except:
-            return redirect(reverse('challenges:join'), kwargs={ 'challenge_id': challenge_id })
-        return redirect(reverse('ninjas:dashboard'))
+            pass
+        return redirect(reverse('challenges:join', kwargs={ 'challenge_id': challenge_id }))
 
 class Bouts(View):
     def get(self, request):
@@ -89,11 +92,32 @@ class Bouts(View):
         pass
 
 class DetermineResult(View):
-    def get(self, request):
-        pass
+    def get(self, request, challenge_id, bout_id, won):
+        bout = SessionBout.objects.get(id=bout_id)
+        ninja = Ninja.objects.get(id=self.request.user.id)
+        for participant in bout.participants.all():
+            if participant != ninja:
+                opponent = participant
+        if won:
+            bout.winner = ninja
+            bout.loser = opponent
+        else:
+            bout.winner = opponent
+            bout.loser = ninja
+        return redirect(reverse('challenges:join'), kwargs={ 'challenge_id': challenge_id })
     
     def post(self, request):
         pass
+
+def generate_bouts(session):
+    num_bouts = SessionBout.objects.filter(challenge_session=session).count()
+    first_bout = None
+    while (num_bouts % 4 != 0):
+        temp = SessionBout.objects.create(challenge_session=session)
+        if first_bout is None:
+            first_bout = temp
+        num_bouts = SessionBout.objects.filter(challenge_session=session).count()
+    return first_bout
 
 def generate_challenge_data(challenge_id):
     # Get the challenge
@@ -123,9 +147,14 @@ def generate_challenge_data(challenge_id):
                         bout_scores.append(0)
                     else:
                         bout_scores.append(None)
+                if len(bout_scores) < 2:
+                    bout_scores.append(None)
                 session_results.append(bout_scores)
                 if session.number == 1:
                     if not bout.is_full:
+                        participants.append(None)
+                        bout_scores.append(None)
+                    if len(participants) < 2:
                         participants.append(None)
                     data['teams'].append(participants)
             data['results'].append(session_results)
@@ -137,14 +166,15 @@ def add_ninja_to_challenge(ninja, challenge):
     # Ninja can only join the first session
     try:
         first_session = ChallengeSession.objects.get(challenge=challenge, number=1)
-        first_bout = SessionBout.objects.filter(challenge_session=first_session).last()
-        if not first_bout.is_full:
-            first_bout.participants.add(ninja)
-            first_bout.save()
-        else:
-            new_session_bout = SessionBout.objects.create(challenge_session=first_session)
-            new_session_bout.participants.add(ninja)
-            new_session_bout.save()
+        all_bouts = SessionBout.objects.filter(challenge_session=first_session)
+        for bout in all_bouts:
+            if not bout.is_full:
+                bout.participants.add(ninja)
+                bout.save()
+                break
+        next_open_bout = generate_bouts()
+        next_open_bout.participants.add(ninja)
+        next_open_bout.save()
     except:
         pass
 
@@ -159,6 +189,8 @@ def get_bout_data(ninja, bout):
     session1 = bout.challenge_session
     challenge1 = session1.challenge
     data['challenge_name'] = challenge1.name
+    data['bout_id'] = bout.id
+    data['challenge_id'] = challenge1.id
     for participant in bout.participants.all():
         if ninja != participant:
             data['opponent'] = participant.username
