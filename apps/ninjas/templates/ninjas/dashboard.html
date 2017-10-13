@@ -43,7 +43,7 @@
             {% for challenge in challenges %}
               {% if current_user in challenge.participants %}
                 <tr>
-                  <td><a href="">{{ challenge.name }}</a></td>
+                  <td><a href="{% url 'challenges:join' challenge_id=challenge.id %}">{{ challenge.name }}</a></td>
                   <td>{{ challenge.description }}</td>
                   <td>{{ challenge.start_date }}</td>
                 </tr>
@@ -63,7 +63,7 @@
             </tr>
             {% for challenge in challenges %}
             <tr>
-              <td><a href="">{{ challenge.name }}</a></td>
+              <td><a href="{% url 'challenges:join' challenge_id=challenge.id %}">{{ challenge.name }}</a></td>
               <td>{{ challenge.start_date }}</td>
               <td>{{ challenge.signup_end_date }}</td>
             </tr>

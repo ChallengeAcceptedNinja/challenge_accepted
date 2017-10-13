@@ -48,14 +48,18 @@ class Login(View):
         errors = {}
         form = NinjaLoginForm(request.POST)
         if (form.is_valid()):
+            print "form is valid"
+            print form.cleaned_data
             user = authenticate(
                 username=form.cleaned_data['username'],
                 password=form.cleaned_data['password']
             )
             if user:
+                print "found user"
                 login(request, user)
                 return redirect(reverse('ninjas:dashboard'))
             else:
+                print "can't find user"
                 errors.update({
                     'invalid': 'Username and/or password is invalid.'
                 })
