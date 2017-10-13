@@ -79,7 +79,7 @@ class Bouts(View):
             ninja = Ninja.objects.get(id=self.request.user.id)
             all_session_bouts = SessionBout.objects.all()
             for bout in all_session_bouts:
-                if ninja in bout.participants.all():
+                if ninja_in(bout.participants.all(), ninja):
                     temp = get_bout_data(ninja, bout)
                     if bout_is_active(bout):
                         bouts_data.append(temp)
@@ -92,22 +92,35 @@ class Bouts(View):
         pass
 
 class DetermineResult(View):
-    def get(self, request, challenge_id, bout_id, won):
-        bout = SessionBout.objects.get(id=bout_id)
-        ninja = Ninja.objects.get(id=self.request.user.id)
-        for participant in bout.participants.all():
-            if participant != ninja:
-                opponent = participant
-        if won:
-            bout.winner = ninja
-            bout.loser = opponent
-        else:
-            bout.winner = opponent
-            bout.loser = ninja
-        return redirect(reverse('challenges:join'), kwargs={ 'challenge_id': challenge_id })
-    
-    def post(self, request):
+    def get(self, request):
         pass
+    
+    def post(self, request, bout_id):
+        won = request.POST.get('won')
+        challenge_id = request.POST.get('challenge_id')
+        try:
+            ninja = Ninja.objects.get(id=self.request.user.id)
+            opponent = None
+            bout = SessionBout.objects.get(id=bout_id)
+            for participant in bout.participants.all():
+                if participant != ninja:
+                    opponent = participant
+            if won:
+                bout.winner = ninja
+                bout.loser = opponent
+            else:
+                bout.winner = opponent
+                bout.loser = ninja
+            bout.save()
+        except:
+            pass
+        return redirect(reverse('challenges:join', kwargs={ 'challenge_id': challenge_id }))
+
+def ninja_in(participants, ninja):
+    for participant in participants:
+        if participant == ninja:
+            return True
+    return False
 
 def generate_bouts(session):
     num_bouts = SessionBout.objects.filter(challenge_session=session).count()
@@ -179,10 +192,10 @@ def add_ninja_to_challenge(ninja, challenge):
         pass
 
 def bout_is_active(bout):
-    now = datetime.datetime.today()
+    now = datetime.date.today()
     session1 = bout.challenge_session
     challenge1 = session1.challenge
-    return now > challenge1.start_date
+    return now >= challenge1.start_date
 
 def get_bout_data(ninja, bout):
     data = {}
